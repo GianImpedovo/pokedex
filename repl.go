@@ -7,10 +7,9 @@ import (
 	"strings"
 )
 
-func startRepl() {
+func startRepl(c *config) {
 
 	scan := bufio.NewScanner(os.Stdin)
-	c := &config{Next: "https://pokeapi.co/api/v2/location-area?offset=0&limit=20", Previous: ""}
 	for {
 		fmt.Print("Pokedex > ")
 		scan.Scan()
@@ -38,11 +37,6 @@ type cliCommand struct {
 	name        string
 	description string
 	callback    func(c *config) error
-}
-
-type config struct {
-	Next     string
-	Previous string
 }
 
 func getCommand() map[string]cliCommand {
