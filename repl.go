@@ -13,14 +13,17 @@ func startRepl(c *config) {
 	for {
 		fmt.Print("Pokedex > ")
 		scan.Scan()
-		cleanWords := cleanInput(scan.Text())
-		if len(cleanWords) == 0 {
+		c.cmd = cleanInput(scan.Text())
+		if len(c.cmd) == 0 {
 			continue
 		}
-		cmd := cleanWords[0]
+		cmd := c.cmd[0]
 		value, exist := getCommand()[cmd]
 		if exist {
-			_ = value.callback(c)
+			err := value.callback(c)
+			if err != nil {
+				fmt.Println(err)
+			}
 		} else {
 			fmt.Printf("Unknown command\n")
 		}
@@ -53,13 +56,18 @@ func getCommand() map[string]cliCommand {
 		},
 		"map": {
 			name:        "map",
-			description: "Obtain the area lcoation on the pokeapi",
+			description: "Get the next page of locations",
 			callback:    commandMap,
 		},
 		"mapb": {
 			name:        "mapb",
-			description: "Obtain the previous area lcoation on the pokeapi",
+			description: "Get the previous page of locations",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore <location-area>",
+			description: "Explore a location",
+			callback:    commandExplore,
 		},
 	}
 }

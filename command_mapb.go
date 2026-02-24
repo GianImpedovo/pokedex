@@ -1,15 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 func commandMapb(c *config) error {
 	if c.Previous == nil {
-		fmt.Println("you're on the first page")
-		return fmt.Errorf("you're on the first page")
+		return errors.New("you're on the first page")
 	}
 	info, err := c.pokeapiClient.ListLocationAreas(c.Previous)
 	if err != nil {
-		return fmt.Errorf("could not list location areas: %w", err)
+		return err
 	}
 
 	c.Next = info.Next

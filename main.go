@@ -10,6 +10,7 @@ type config struct {
 	pokeapiClient pokeapi.Client
 	Next          *string
 	Previous      *string
+	cmd           []string
 }
 
 func main() {
