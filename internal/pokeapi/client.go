@@ -96,3 +96,23 @@ func (c *Client) ListPokemonsArea(location string) (LocationPokemonsResponse, er
 
 	return locationPokemons, nil
 }
+
+func (c *Client) GetPokemon(pokemonName string) (Pokemon, error) {
+	fullurl := baseURL + "/pokemon/" + pokemonName
+	res, err := c.pokeapiClient.Get(fullurl)
+	if err != nil {
+		return Pokemon{}, err
+	}
+	defer res.Body.Close()
+
+	var pokemon Pokemon
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return Pokemon{}, err
+	}
+	err = json.Unmarshal(body, &pokemon)
+	if err != nil {
+		return Pokemon{}, err
+	}
+	return pokemon, nil
+}
